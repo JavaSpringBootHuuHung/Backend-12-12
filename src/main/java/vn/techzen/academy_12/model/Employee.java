@@ -18,4 +18,5 @@ public class Employee {
      double salary;
      Gender gender;
      String phone;
+     Integer departmentId;
 }
