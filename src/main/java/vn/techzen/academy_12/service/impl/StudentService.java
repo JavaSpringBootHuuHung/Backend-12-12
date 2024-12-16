@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import vn.techzen.academy_12.model.Student;
+import vn.techzen.academy_12.entity.Student;
 import vn.techzen.academy_12.repository.IStudentRepository;
 import vn.techzen.academy_12.service.IStudentService;
 
@@ -27,12 +27,13 @@ public class StudentService implements IStudentService {
 //        this.studentRepository = studentRepository;
 //    }
     @Override
-    public List<Student> findAlls(){
-        return studentRepository.findAlls();
+    public List<Student> findAlls(String name, Double fromScore, Double toScore) {
+//        return studentRepository.findByNameContainingAndScoreBetween(name, fromScore, toScore);
+        return studentRepository.findByAttr(name, fromScore, toScore);
     }
     @Override
     public Student findById(int id){
-        return studentRepository.findById(id);
+        return studentRepository.findById(id).get();
     }
     @Override
     public Student save(Student student){

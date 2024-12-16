@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.techzen.academy_12.model.Dictionary;
-import vn.techzen.academy_12.model.Student;
+import vn.techzen.academy_12.entity.Dictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;

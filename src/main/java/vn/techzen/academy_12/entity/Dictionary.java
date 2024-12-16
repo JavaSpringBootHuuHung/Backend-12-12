@@ -1,4 +1,4 @@
-package vn.techzen.academy_12.model;
+package vn.techzen.academy_12.entity;
 
 public class Dictionary {
     private  int id;

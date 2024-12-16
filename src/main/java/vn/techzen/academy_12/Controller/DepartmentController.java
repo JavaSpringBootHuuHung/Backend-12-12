@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.techzen.academy_12.JsonResponse;
 import vn.techzen.academy_12.dto.exception.AppException;
 import vn.techzen.academy_12.dto.exception.ErrorCode;
-import vn.techzen.academy_12.model.Department;
+import vn.techzen.academy_12.entity.Department;
 
 import java.util.ArrayList;
 import java.util.Arrays;
