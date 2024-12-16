@@ -1,15 +1,18 @@
 package vn.techzen.academy_12.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import vn.techzen.academy_12.entity.Employee;
 import vn.techzen.academy_12.entity.Gender;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface IEmployeeRepository  extends JpaRepository<Employee, Integer> {
+public interface IEmployeeRepository  extends JpaRepository<Employee, Integer> , JpaSpecificationExecutor<Employee> {
 
     @Query("""
     FROM Employee  
@@ -25,14 +28,15 @@ public interface IEmployeeRepository  extends JpaRepository<Employee, Integer> {
     AND (:phone IS NULL OR phone LIKE CONCAT('%', :phone, '%'))
     AND (:departmentId IS NULL OR department = :departmentId)
 """)
-    List<Employee> findByAttr(
+    Page<Employee> findByAttr(
             @Param("name") String name,
             @Param("dobFrom") LocalDate dobFrom,
             @Param("dobTo") LocalDate dobTo,
             @Param("gender") Gender gender,
             @Param("salaryRange") Integer salaryRange,
             @Param("phone") String phone,
-            @Param("departmentId") Integer departmentId
+            @Param("departmentId") Integer departmentId,
+            Pageable pageable
     );
 
 }

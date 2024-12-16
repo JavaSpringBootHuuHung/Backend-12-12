@@ -3,6 +3,8 @@ package vn.techzen.academy_12.service.impl;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.techzen.academy_12.entity.Employee;
 import vn.techzen.academy_12.entity.Gender;
@@ -19,8 +21,8 @@ public class EmployeeService  implements IEmployeeService {
     IEmployeeRepository employeeRepository;
 
     @Override
-    public List<Employee> findAll(String name, LocalDate dobFrom, LocalDate dobTo, Gender gender, Integer salaryRange, String phone, Integer department_id) {
-        return employeeRepository.findByAttr( name,  dobFrom,  dobTo,  gender,  salaryRange,  phone,  department_id);
+    public Page<Employee> findAll(String name, LocalDate dobFrom, LocalDate dobTo, Gender gender, Integer salaryRange, String phone, Integer department_id, Pageable pageable) {
+        return employeeRepository.findByAttr( name,  dobFrom,  dobTo,  gender,  salaryRange,  phone,  department_id, pageable);
     }
     @Override
     public Employee findById(int id) {

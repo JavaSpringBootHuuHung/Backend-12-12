@@ -2,6 +2,10 @@ package vn.techzen.academy_12.Controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,7 @@ import vn.techzen.academy_12.JsonResponse;
 import vn.techzen.academy_12.dto.ApiResponse;
 import vn.techzen.academy_12.dto.exception.AppException;
 import vn.techzen.academy_12.dto.exception.ErrorCode;
+import vn.techzen.academy_12.dto.page.PageResponse;
 import vn.techzen.academy_12.entity.Employee;
 import vn.techzen.academy_12.entity.Gender;
 import vn.techzen.academy_12.entity.Student;
@@ -34,16 +39,21 @@ public class ManageEmployeeController {
             @RequestParam(value = "gender", required = false) Gender gender,
             @RequestParam(value = "salaryRange", required = false) Integer salaryRange,
             @RequestParam(value = "phone", required = false) String phone,
-            @RequestParam(value = "departmentId", required = false) Integer departmentId
+            @RequestParam(value = "departmentId", required = false) Integer departmentId,
+            @PageableDefault(size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        try {
-            List<Employee> filteredEmployees = employeeService.findAll(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
-            return ResponseEntity.ok(ApiResponse.<List<Employee>>builder()
-                    .data(filteredEmployees)
-                    .build());
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.CANNOT_CALL_API);
-        }
+        return ResponseEntity.ok(ApiResponse.<PageResponse<Employee>>builder()
+                .data(new PageResponse<>(employeeService.findAll(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable)))
+                .build());
+
+//        try {
+//            List<Employee> filteredEmployees = employeeService.findAll(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
+//            return ResponseEntity.ok(ApiResponse.<List<Employee>>builder()
+//                    .data(filteredEmployees)
+//                    .build());
+//        } catch (Exception e) {
+//            throw new AppException(ErrorCode.CANNOT_CALL_API);
+//        }
     }
 
     @GetMapping("/{id}")
@@ -75,13 +85,14 @@ public class ManageEmployeeController {
 
     // API to delete employee by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable int id) {
+    public ResponseEntity<?> deleteEmployee(@PathVariable int id,@PageableDefault(size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         employeeService.deleteEmployee(id);
-        List<Employee> remainingEmployees = employeeService.findAll(null, null, null, null, null, null, null);
+        Page<Employee> remainingEmployees = employeeService.findAll(null, null, null, null, null, null, null,pageable);
 
-        return ResponseEntity.ok(ApiResponse.<List<Employee>>builder()
-                .data(remainingEmployees)
+        return ResponseEntity.ok(ApiResponse.<PageResponse<Employee>>builder()
+                .data(new PageResponse<>(remainingEmployees))
                 .build());
+
     }
 
 
