@@ -12,7 +12,6 @@ import vn.techzen.academy_12.repository.IEmployeeRepository;
 import vn.techzen.academy_12.service.IEmployeeService;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -52,10 +51,6 @@ public class EmployeeService  implements IEmployeeService {
     public Void deleteEmployee(int id) {
         employeeRepository.deleteById(id);
         return null;
-    }
-
-    public void deleteById(int id) {
-        employeeRepository.deleteById(id);
     }
 
 }

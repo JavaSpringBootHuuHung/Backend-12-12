@@ -1,11 +1,11 @@
 package vn.techzen.academy_12.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Random;
 
 @Getter
 @Setter
@@ -20,11 +20,13 @@ public class Employee {
      String name;
      LocalDate birthDate;
      double salary;
-     Gender gender;
      String phone;
 
+     @ManyToOne
+     @JoinColumn(name = "department_id") // Đặt tên cột rõ ràng
+     Department department;
 
      @ManyToOne
-      @JoinColumn
-     Department department;
+     @JoinColumn(name = "gender_id") // Đặt tên cột rõ ràng
+     Gender gender;
 }

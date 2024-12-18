@@ -5,12 +5,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import vn.techzen.academy_12.entity.Employee;
-import vn.techzen.academy_12.entity.Gender;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vn.techzen.academy_12.entity.Gender;
+
 import java.time.LocalDate;
-import java.util.List;
 
 public interface IEmployeeRepository  extends JpaRepository<Employee, Integer> , JpaSpecificationExecutor<Employee> {
 

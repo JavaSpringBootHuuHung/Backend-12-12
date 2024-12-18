@@ -1,13 +1,11 @@
 package vn.techzen.academy_12.Controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.techzen.academy_12.JsonResponse;
@@ -17,11 +15,11 @@ import vn.techzen.academy_12.dto.exception.ErrorCode;
 import vn.techzen.academy_12.dto.page.PageResponse;
 import vn.techzen.academy_12.entity.Employee;
 import vn.techzen.academy_12.entity.Gender;
-import vn.techzen.academy_12.entity.Student;
+import vn.techzen.academy_12.mapper.IEmployeeMapper;
 import vn.techzen.academy_12.service.impl.EmployeeService;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -30,7 +28,7 @@ import java.util.*;
 public class ManageEmployeeController {
 
     EmployeeService employeeService;
-
+    IEmployeeMapper employeeMapper;
     @GetMapping
     public ResponseEntity<?> getAllEmployees(
             @RequestParam(value = "name", required = false) String name,
@@ -42,10 +40,13 @@ public class ManageEmployeeController {
             @RequestParam(value = "departmentId", required = false) Integer departmentId,
             @PageableDefault(size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return ResponseEntity.ok(ApiResponse.<PageResponse<Employee>>builder()
-                .data(new PageResponse<>(employeeService.findAll(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable)))
-                .build());
 
+        return ResponseEntity.ok(employeeService.findAll(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable)
+                .stream()
+                .map(employeeMapper::employeeToEmployeeResponse)
+                .collect(Collectors.toList())
+        );
+    }
 //        try {
 //            List<Employee> filteredEmployees = employeeService.findAll(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId);
 //            return ResponseEntity.ok(ApiResponse.<List<Employee>>builder()
@@ -54,7 +55,9 @@ public class ManageEmployeeController {
 //        } catch (Exception e) {
 //            throw new AppException(ErrorCode.CANNOT_CALL_API);
 //        }
-    }
+//        return ResponseEntity.ok(ApiResponse.<PageResponse<Employee>>builder()
+//                .data(new PageResponse<>(employeeService.findAll(name, dobFrom, dobTo, gender, salaryRange, phone, departmentId, pageable)))
+//                .build());
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Employee>> getEmployee(@PathVariable int id) {
@@ -94,6 +97,7 @@ public class ManageEmployeeController {
                 .build());
 
     }
+
 
 
 }
