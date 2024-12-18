@@ -1,8 +1,11 @@
 package vn.techzen.academy_12.Controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import vn.techzen.academy_12.dto.ApiResponse;
 import vn.techzen.academy_12.dto.exception.AppException;
@@ -13,7 +16,9 @@ import vn.techzen.academy_12.entity.Student;
 import vn.techzen.academy_12.mapper.IStudentMapper;
 import vn.techzen.academy_12.service.IStudentService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,12 +48,21 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentResponse> save(@RequestBody StudentRequest studentRequest) {
+    public ResponseEntity<?> save(@Valid @RequestBody StudentRequest studentRequest, BindingResult bindingResult) {
         // buoc 1: StudentRequest -> Student
 //        Student student1 = Student.builder().name(studentRequest.getName())
 //                .score(studentRequest.getScore())
 //                .clazz(Clazz.builder().id(studentRequest.getClazz().getId()).build())
 //                .build();
+        if(bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getAllErrors().forEach((error) -> {
+                String fieldName = ((FieldError)error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName,errorMessage);
+            }); 
+            return ResponseEntity.ok().body(ApiResponse.builder().data(errors).message("invalid input").code(4000).build());
+        }
         Student student = studentMapper.studentRequestToStudent(studentRequest);
 
         studentService.save(student);
