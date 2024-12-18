@@ -18,8 +18,8 @@ public class StudentService implements IStudentService {
     IStudentRepository studentRepository;
 
     @Override
-    public Page<Student> findAll(String name, Pageable pageable) {
-        return studentRepository.findByAttr(name, 0.0, 9.7, pageable);
+    public List<Student> findAll(String name,Double fromScore,Double toScore) {
+        return studentRepository.findByAttr(name, fromScore, toScore);
     }
 
     @Override

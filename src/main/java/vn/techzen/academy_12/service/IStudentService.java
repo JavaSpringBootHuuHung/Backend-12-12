@@ -7,7 +7,7 @@ import vn.techzen.academy_12.entity.Student;
 import java.util.List;
 
 public interface IStudentService {
-    Page<Student> findAll(String name, Pageable pageable);
+    List<Student> findAll(String name, Double fromScore, Double toScore);
 
     Student findById(Integer id);
 

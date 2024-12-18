@@ -5,21 +5,23 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Getter
 @Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
-public class Student {
-     @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     int id;
-     String name;
-     double score;
+public class Clazz {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+    String name;
 
-     @ManyToOne
-     @JsonIgnoreProperties("students")
-     Clazz clazz;
+    @OneToMany(mappedBy = "clazz")
+    @JsonIgnoreProperties("clazz")
+    List<Student> students;
+
 }
